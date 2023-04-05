@@ -1,0 +1,45 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model COURS {
+  code       Int      @id @default(autoincrement())
+  nomCours   String   @db.VarChar(100)
+  enseignant String   @db.VarChar(255)
+  EXAMEN     EXAMEN[] @ignore
+}
+
+model ETUDIANT {
+  matricule     Int              @id @default(autoincrement())
+  nom           String           @db.VarChar(200)
+  prenom        String?          @db.VarChar(255)
+  dateNaissance DateTime         @db.Date
+  niveau        ETUDIANT_niveau?
+  EXAMEN        EXAMEN[]         @ignore
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
+model EXAMEN {
+  matricule Int
+  code      Int
+  note      Int
+  ETUDIANT  ETUDIANT @relation(fields: [matricule], references: [matricule], onUpdate: Restrict, map: "EXAMEN_ibfk_1")
+  COURS     COURS    @relation(fields: [code], references: [code], onUpdate: Restrict, map: "EXAMEN_ibfk_2")
+
+  @@index([code], map: "code")
+  @@index([matricule], map: "matricule")
+  @@ignore
+}
+
+enum ETUDIANT_niveau {
+  L1
+  L2
+  L3
+  M1
+  M2
+}
