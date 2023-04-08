@@ -6,7 +6,9 @@ exports.route = (()=>{
     var app = express.Router()
     // accueil route
     app.route("/")
-        .get()
+        .get((req, res)=>{
+            res.send("welcome to the site")
+        })
         .post((req, res)=>{
             const user = new User(req.body.name, req.body.password)
             res.send({name : user.nameUser, password : user.passwordUser})

@@ -3,7 +3,7 @@ const Etudiant = require("../Services/Classes/Etudiant").Etudiant
 module.exports = {
 
     getAllStudents : function(req, res){
-        let niveau = req.params.niveau ?? ""
+        let niveau = req.params.niveau ?? null
         EtudiantModel.findAllEtudiant(niveau, (allEtudiants => {
             res.json(allEtudiants)
             
